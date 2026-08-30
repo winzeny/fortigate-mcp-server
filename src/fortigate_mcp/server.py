@@ -502,6 +502,81 @@ def _make_tools() -> list[Tool]:
                 "properties": {"device": {"type": "string", "default": "default"}},
             },
         ),
+        # ── Static Route ──
+        Tool(
+            name="fortigate_list_static_routes",
+            description="List IPv4 static routes — destination, gateway, device, distance, priority.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_static_routes6",
+            description="List IPv6 static routes.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── Policy Route ──
+        Tool(
+            name="fortigate_list_policy_routes",
+            description="List IPv4 policy routes — input device, source/dest, gateway, output interface.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_policy_routes6",
+            description="List IPv6 policy routes.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── SD-WAN ──
+        Tool(
+            name="fortigate_get_sdwan_config",
+            description="Get SD-WAN zone configuration — zones, members assigned, health-check settings.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_sdwan_members",
+            description="List SD-WAN member interfaces — interface name, gateway, IP, status (alive/dead).",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_sdwan_rules",
+            description="List SD-WAN service rules — name, strategy (spoke/sla), SLA target, load-balance method.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_sdwan_sla",
+            description="List SD-WAN SLA configurations — latency, jitter, packet-loss thresholds.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_sdwan_status",
+            description="Get live SD-WAN status — per-member link quality (latency/jitter/packet-loss), SLA status.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
         # ── System (read-only) ──
         Tool(
             name="fortigate_get_status",
@@ -623,6 +698,18 @@ async def _call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
         "fortigate_list_prefix_lists": lambda: ft.fortigate_list_prefix_lists(device=dev),
         "fortigate_list_prefix_list6": lambda: ft.fortigate_list_prefix_list6(device=dev),
         "fortigate_list_access_lists": lambda: ft.fortigate_list_access_lists(device=dev),
+        # Static Route
+        "fortigate_list_static_routes": lambda: ft.fortigate_list_static_routes(device=dev),
+        "fortigate_list_static_routes6": lambda: ft.fortigate_list_static_routes6(device=dev),
+        # Policy Route
+        "fortigate_list_policy_routes": lambda: ft.fortigate_list_policy_routes(device=dev),
+        "fortigate_list_policy_routes6": lambda: ft.fortigate_list_policy_routes6(device=dev),
+        # SD-WAN
+        "fortigate_get_sdwan_config": lambda: ft.fortigate_get_sdwan_config(device=dev),
+        "fortigate_list_sdwan_members": lambda: ft.fortigate_list_sdwan_members(device=dev),
+        "fortigate_list_sdwan_rules": lambda: ft.fortigate_list_sdwan_rules(device=dev),
+        "fortigate_list_sdwan_sla": lambda: ft.fortigate_list_sdwan_sla(device=dev),
+        "fortigate_get_sdwan_status": lambda: ft.fortigate_get_sdwan_status(device=dev),
         # System
         "fortigate_get_status": lambda: ft.fortigate_get_status(device=dev),
         "fortigate_get_license": lambda: ft.fortigate_get_license(device=dev),

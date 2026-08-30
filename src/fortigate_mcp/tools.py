@@ -651,3 +651,90 @@ async def fortigate_list_access_lists(device: str = "default") -> str:
         return _ok(data)
     except Exception as e:
         return _err(str(e))
+
+
+# ─── Static Route Tools ────────────────────────────────────────────────────────
+
+async def fortigate_list_static_routes(device: str = "default") -> str:
+    """List IPv4 static routes — destination, gateway, device, distance, priority."""
+    try:
+        data = await _reg().get_client(device).list_static_routes()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_static_routes6(device: str = "default") -> str:
+    """List IPv6 static routes."""
+    try:
+        data = await _reg().get_client(device).list_static_routes6()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── Policy Route Tools ───────────────────────────────────────────────────────
+
+async def fortigate_list_policy_routes(device: str = "default") -> str:
+    """List IPv4 policy routes — input device, source/dest, gateway, output interface."""
+    try:
+        data = await _reg().get_client(device).list_policy_routes()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_policy_routes6(device: str = "default") -> str:
+    """List IPv6 policy routes."""
+    try:
+        data = await _reg().get_client(device).list_policy_routes6()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── SD-WAN Tools ─────────────────────────────────────────────────────────────
+
+async def fortigate_get_sdwan_config(device: str = "default") -> str:
+    """Get SD-WAN zone configuration — zones, members assigned, health-check settings."""
+    try:
+        data = await _reg().get_client(device).get_sdwan_config()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_sdwan_members(device: str = "default") -> str:
+    """List SD-WAN member interfaces — interface name, gateway, IP, status (alive/dead)."""
+    try:
+        data = await _reg().get_client(device).list_sdwan_members()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_sdwan_rules(device: str = "default") -> str:
+    """List SD-WAN service rules — name, strategy (spoke/sla), SLA target, load-balance method."""
+    try:
+        data = await _reg().get_client(device).list_sdwan_rules()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_sdwan_sla(device: str = "default") -> str:
+    """List SD-WAN SLA configurations — latency, jitter, packet-loss thresholds per SLA."""
+    try:
+        data = await _reg().get_client(device).list_sdwan_sla()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_sdwan_status(device: str = "default") -> str:
+    """Get live SD-WAN status — per-member link quality (latency/jitter/packet-loss), SLA status."""
+    try:
+        data = await _reg().get_client(device).get_sdwan_status()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))

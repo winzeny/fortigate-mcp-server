@@ -365,6 +365,48 @@ class FortiGateClient:
         """Return configured access (route) lists."""
         return await self._get("/cmdb/router/access-list", scope="vdom")
 
+    # ── Static Route ─────────────────────────────────────
+
+    async def list_static_routes(self) -> list[dict[str, Any]]:
+        """Return IPv4 static routes — destination, gateway, device, distance, priority."""
+        return await self._get("/cmdb/router/static", scope="vdom")
+
+    async def list_static_routes6(self) -> list[dict[str, Any]]:
+        """Return IPv6 static routes."""
+        return await self._get("/cmdb/router/static6", scope="vdom")
+
+    # ── Policy Route ─────────────────────────────────────
+
+    async def list_policy_routes(self) -> list[dict[str, Any]]:
+        """Return IPv4 policy routes — input device, source/dest, gateway, output."""
+        return await self._get("/cmdb/router/policy", scope="vdom")
+
+    async def list_policy_routes6(self) -> list[dict[str, Any]]:
+        """Return IPv6 policy routes."""
+        return await self._get("/cmdb/router/policy6", scope="vdom")
+
+    # ── SD-WAN ────────────────────────────────────────────
+
+    async def get_sdwan_config(self) -> dict[str, Any]:
+        """Return SD-WAN zone configuration and status."""
+        return await self._get("/cmdb/system/sdwan")
+
+    async def list_sdwan_members(self) -> list[dict[str, Any]]:
+        """Return SD-WAN member interfaces — member index, interface, gateway, status."""
+        return await self._get("/cmdb/system/sdwan/member")
+
+    async def list_sdwan_rules(self) -> list[dict[str, Any]]:
+        """Return SD-WAN service (SLA) rules — name, members, strategy, SLA targets."""
+        return await self._get("/cmdb/firewall/sdwan-service")
+
+    async def list_sdwan_sla(self) -> list[dict[str, Any]]:
+        """Return SD-WAN SLA configurations — latency, jitter, bandwidth thresholds."""
+        return await self._get("/cmdb/firewall/sdwan-sla")
+
+    async def get_sdwan_status(self) -> dict[str, Any]:
+        """Return live SD-WAN status — per-member link status, SLA status, traffic steering."""
+        return await self._get("/monitor/sdwan/status")
+
     # ── System Info (read-only) ────────────────────────────
 
     async def get_system_status(self) -> dict[str, Any]:

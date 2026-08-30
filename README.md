@@ -21,7 +21,7 @@ type-safe set of tools — no CLI expertise or API knowledge required.
 
 ---
 
-## 🛠️ Available Tools (53 total)
+## 🛠️ Available Tools (62 total)
 
 Every tool accepts an optional `device` parameter to target a specific FortiGate.
 
@@ -115,14 +115,24 @@ Every tool accepts an optional `device` parameter to target a specific FortiGate
 | `fortigate_list_rip_neighbor` | RIP neighbor table |
 | `fortigate_get_rip_status` | Live RIP routing table — learned routes and metrics |
 
-### 🎛️ Route Policy
+### 🎛️ Static / Policy Route
 
 | Tool | Description |
 |------|-------------|
-| `fortigate_list_route_maps` | Route maps — used for routing policy control |
-| `fortigate_list_prefix_lists` | IPv4 prefix lists — BGP/OSPF route filtering |
-| `fortigate_list_prefix_list6` | IPv6 prefix lists |
-| `fortigate_list_access_lists` | Access (route) lists — legacy route filtering |
+| `fortigate_list_static_routes` | IPv4 static routes — destination, gateway, distance, priority |
+| `fortigate_list_static_routes6` | IPv6 static routes |
+| `fortigate_list_policy_routes` | IPv4 policy routes — input, source/dest, gateway, output |
+| `fortigate_list_policy_routes6` | IPv6 policy routes |
+
+### 🌐 SD-WAN
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_get_sdwan_config` | SD-WAN zones and health-check configuration |
+| `fortigate_list_sdwan_members` | SD-WAN member interfaces — gateway, IP, status |
+| `fortigate_list_sdwan_rules` | SD-WAN service rules — SLA strategy, load-balance method |
+| `fortigate_list_sdwan_sla` | SD-WAN SLA thresholds — latency, jitter, packet-loss |
+| `fortigate_get_sdwan_status` | Live SD-WAN status — link quality per member, SLA pass/fail |
 
 ### 🖥️ System
 
