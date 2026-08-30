@@ -479,3 +479,217 @@ fortigate_list_routes(device="hq-fw")
 ```
 fortigate_get_attack_logs(filter="severity=high", device="hq-fw")
 ```
+
+---
+
+## 🔀 BGP — Real-World Scenarios
+
+### "BGP neighbor ยังไม่ Established — ดูสถานะ"
+```
+fortigate_get_bgp_neighbor_status(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+[
+  {"neighbor": "203.0.113.2", "remote_as": 65002, "state": "Idle",       "prefixes_in": 0},
+  {"neighbor": "203.0.113.6", "remote_as": 65003, "state": "Established","prefixes_in": 4821}
+]
+```
+**วิเคราะห์:** neighbor `203.0.113.2` ยัง Idle อยู่ — เช็คว่า BGP session สร้างได้ไหม, ACL บล็อก port 179 หรือเปล่า, หรือ remote AS ถูกต้องไหม
+
+---
+
+### "ดูว่า BGP รับ route มาจาก ISP กี่ prefix"
+```
+fortigate_get_bgp_neighbor_status(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+{"neighbor": "203.0.113.2", "state": "Established", "prefixes_in": 12453, "prefixes_out": 3}
+```
+**วิเคราะห์:** รับ 12,453 prefix มาจาก ISP — ปกติ full table จะประมาณ 900K+ prefix ถ้าน้อยกว่านี้มาก อาจมี route filter ติดมา
+
+---
+
+### "ดู BGP routes ที่เรียนรู้มาทั้งหมด (RIB)"
+```
+fortigate_get_bgp_rib(device="hq-fw")
+```
+**ผลลัพธ์ (ตัวอย่าง):**
+```json
+[
+  {"prefix": "1.0.0.0/24",    "next_hop": "203.0.113.2", "as_path": "15169"},
+  {"prefix": "8.8.0.0/16",    "next_hop": "203.0.113.2", "as_path": "15169 3356"},
+  {"prefix": "10.0.0.0/8",    "next_hop": "0.0.0.0",    "as_path": "65001",  "origin": "IGP"},
+  {"prefix": "192.168.0.0/16", "next_hop": "0.0.0.0",    "as_path": "65001",  "origin": "IGP"}
+]
+```
+**วิเคราะห์:**
+- `as_path: 15169` = route มาจาก Google (AS15169) ผ่าน ISP
+- `as_path: 3356` = มาจาก Level3
+- `next_hop: 0.0.0.0` + `origin: IGP` = route ที่เราประกาศเอง (network statement หรือ redistribute)
+
+---
+
+### "เช็ค AS-Path ของ route ไปยัง Facebook (_AS 32934_)"
+```
+fortigate_get_bgp_rib(device="hq-fw")
+# Facebook อยู่ AS32934
+```
+**ผลลัพธ์:**
+```json
+{"prefix": "157.240.0.0/16", "next_hop": "203.0.113.2", "as_path": "65001 174 32934"}
+```
+**วิเคราะห์:** AS-Path = `เรา(65001) → Cogent(174) → Facebook(32934)` — path ถูกต้อง ถ้าต้องการ path สำรอง ดูว่า AS นี้มาจาก ISP อื่นได้ไหม
+
+---
+
+### "ดูว่ามี route ที่มาจาก AS ต่างๆ กี่ AS"
+```
+fortigate_get_bgp_rib(device="hq-fw")
+```
+**วิเคราะห์:** ดู AS-path ที่ซ้ำๆ — ถ้าเห็น `as_path: "65001 174"` เยอะๆ แปลว่า traffic วิ่งผ่าน Cogent เป็นหลัก — ถ้ามี ISP สำรอง อาจอยากให้วิ่งผ่าน AS อื่นบ้าง
+
+---
+
+### "ดู advertised networks — เราประกาศอะไรออกไป"
+```
+fortigate_list_bgp_networks(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+[
+  {"prefix": "10.0.0.0/8",     "origin": "IGP"},
+  {"prefix": "103.20.190.0/24","origin": "IGP"}
+]
+```
+**วิเคราะห์:** ประกาศ private `10.0.0.0/8` ออกไปด้วย — ต้องตรวจสอบ route map filter ว่าปิด private IP ออกไปแล้ว
+
+---
+
+### "ดู configured neighbors — remote-as อะไรไว้"
+```
+fortigate_list_bgp_neighbors(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+[
+  {"neighbor": "203.0.113.2", "remote_as": 65002, "description": "ISP-Primary"},
+  {"neighbor": "203.0.113.6", "remote_as": 65003, "description": "ISP-Backup"}
+]
+```
+**วิเคราะห์:** มี 2 ISP — ต้องตรวจสอบว่าใช้ AS-path prepend หรือ MED ตั้งค่า preference ระหว่าง 2 ISP ยังไง
+
+---
+
+### "ดู BGP config — AS, router-id, timers"
+```
+fortigate_get_bgp_config(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+{
+  "as": 65001,
+  "router_id": "10.0.0.1",
+  "keepalive": 30,
+  "holdtime": 90,
+  "ebgp_multihop": 1
+}
+```
+**วิเคราะห์:**
+- `ebgp_multihop: 1` = eBGP ตรง physical interface ถ้าใช้ loopback ต้อง set = 2+
+- `router_id` ต้อง match กับ OSPF router-id ถ้าใช้ redistribute ระหว่างกัน
+
+---
+
+### "BGP neighbor มี flapping — เช็ค uptime"
+```
+fortigate_get_bgp_neighbor_status(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+{"neighbor": "203.0.113.2", "state": "Established", "uptime": "00:02:34", "prefixes_in": 4821}
+```
+**วิเคราะห์:** uptime แค่ 2 นาที = session พึ่ง establish ใหม่ = flapping! ดูว่า interface มี error หรือ ISP มีปัญหา
+
+---
+
+### "เช็ค prefix ที่รับมาจาก ISP — มี private IP รั่วไหม (route leak)"
+```
+fortigate_get_bgp_rib(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+{"prefix": "10.0.0.0/8",    "next_hop": "203.0.113.2", "as_path": "65001 174"},
+{"prefix": "172.16.0.0/12",  "next_hop": "203.0.113.2", "as_path": "65001 174"}
+```
+**วิเคราะห์:** มี RFC1918 private ranges (10.0.0.0/8, 172.16.0.0/12) รับเข้ามา! — ต้องมี prefix-list filter บน inbound ปิด private IP
+
+---
+
+### "เช็ค multi-path — route ไป AS เดียวกันมาจากหลาย ISP"
+```
+fortigate_get_bgp_rib(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+{"prefix": "8.8.8.0/24", "next_hop": "203.0.113.2", "as_path": "65001 174 15169"},
+{"prefix": "8.8.8.0/24", "next_hop": "203.0.113.6", "as_path": "65001 65003 15169"}
+```
+**วิเคราะห์:** มี 2 path ไป `8.8.8.0/24` — วิ่งผ่าน ISP Primary และ Backup — ถ้าใช้ load-balance ต้องตรวจสอบ BGP best-path selection
+
+---
+
+### "ดูว่า route ไป prefix สำคัญ วิ่งผ่าน AS ไหน"
+```
+fortigate_get_bgp_rib(device="hq-fw")
+# ดู prefix ที่มี as_path สั้นที่สุด = best path ของ BGP
+```
+**วิเคราะห์:** AS-path สั้นที่สุด = BGP ชอบที่สุด — ถ้าเห็นว่า route สำคัญ (เช่น Google, Cloudflare) วิ่งผ่าน ISP ที่ช้า อาจต้อง tune local-pref หรือ MED
+
+---
+
+## 🔁 OSPF — Real-World Scenarios
+
+### "OSPF neighbor ตัวไหนยังไม่ Full"
+```
+fortigate_list_ospf_neighbor(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+[
+  {"router_id": "10.0.0.2", "state": "Full",  "interface": "port2", "dead": "00:00:32"},
+  {"router_id": "10.0.0.3", "state": "2-Way", "interface": "port3", "dead": "00:00:45"}
+]
+```
+**วิเคราะห์:** `2-Way` = neighbor รับ hello ได้แต่ยังไม่ถึง Full — อาจเป็น DR/BDR election issue หรือ MTU mismatch
+
+---
+
+### "ดู OSPF interface cost — คำนวณ route preference"
+```
+fortigate_get_ospf_interface(device="hq-fw")
+```
+**ผลลัพธ์:**
+```json
+[{"interface": "port2", "area": "0.0.0.0", "cost": 10, "hello": 10, "dead": 40}]
+```
+
+### "ดู OSPF LSDB มีปัญหาหรือเปล่า"
+```
+fortigate_get_ospf_status(device="hq-fw")
+```
+
+---
+
+## 📡 RIP — Real-World Scenarios
+
+### "เช็ค RIP neighbor ว่ายัง alive ไหม"
+```
+fortigate_list_rip_neighbor(device="hq-fw")
+```
+
+### "ดู routing table ที่เรียนรู้ผ่าน RIP"
+```
+fortigate_get_rip_status(device="hq-fw")
+```
