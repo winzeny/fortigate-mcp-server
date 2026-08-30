@@ -1,99 +1,112 @@
-# FortiGate MCP Server
+# 🛡️ FortiGate MCP Server
 
-A **Model Context Protocol (MCP)** server that gives AI agents (including Hermes Agent) a type-safe way to manage **one or more FortiGate firewalls** via the REST API.
+> Give your AI agent full control over FortiGate firewalls — in plain English.
+
+**FortiGate MCP Server** is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)
+server that lets any MCP-compatible AI agent manage FortiGate firewalls through a
+type-safe set of tools — no CLI expertise or API knowledge required.
+
+**Works with:** [Hermes Agent](https://github.com/NousResearch/hermes-agent) · [Claude Code](https://docs.anthropic.com/en/docs/claude-code) · [any MCP client](https://modelcontextprotocol.io/implementations)
 
 ---
 
-## What it does
+## ✨ Features
 
-Once registered, the AI can call named tools such as:
+- **🌐 Multi-device** — Manage one or many FortiGates from a single server
+- **🔒 Token-based auth** — REST API tokens, no username/password stored
+- **📋 Full CRUD** — Addresses, policies, services, interfaces, routes
+- **📊 Read-only views** — System status, license info, firmware version
+- **⚡ Async** — Built on `httpx` async HTTP client
+- **🐍 Python** — Pure Python, no native dependencies, pip-installable
 
-| Tool | What it does |
-|------|--------------|
+---
+
+## 🛠️ Available Tools
+
+| Tool | Description |
+|------|-------------|
 | `fortigate_list_devices` | Discover all registered FortiGate devices |
-| `fortigate_list_addresses` | List firewall address objects |
-| `fortigate_create_address` | Create an address object (ipmask / iprange / fqdn / dynamic) |
+| `fortigate_list_addresses` | List all firewall address objects |
+| `fortigate_create_address` | Create an address (ipmask / iprange / fqdn / dynamic) |
 | `fortigate_delete_address` | Delete an address by name |
 | `fortigate_list_policies` | List all firewall policies |
-| `fortigate_create_policy` | Create a permit/deny policy |
+| `fortigate_create_policy` | Create a permit or deny policy |
 | `fortigate_delete_policy` | Delete a policy by ID |
-| `fortigate_list_services` | List custom service objects |
+| `fortigate_list_services` | List all custom service objects |
 | `fortigate_create_service` | Create a TCP/UDP/SCTP/ICMP service |
 | `fortigate_delete_service` | Delete a service by name |
 | `fortigate_list_interfaces` | List all network interfaces |
-| `fortigate_list_routes` | List static routes |
+| `fortigate_list_routes` | List all static routes |
 | `fortigate_get_status` | Get system status (serial, firmware, HA, uptime) |
 | `fortigate_get_license` | Get license information |
 
-Every tool accepts an optional `device` parameter to target a specific FortiGate — e.g. `fortigate_list_policies(device="hq-fw")`.
+Every tool accepts an optional `device` parameter to target a specific firewall.
 
 ---
 
-## Architecture
-
-```
-AI Agent (Hermes)
-       │
-       │  stdio (JSON-RPC)
-       ▼
-fortigate-mcp-server   ◄── python -m fortigate_mcp.server
-       │
-       │  HTTPS + Bearer token (per device)
-       ▼
-  ┌─────────────┐   ┌─────────────┐
-  │  FortiGate   │   │  FortiGate  │
-  │  HQ (10.0.0.1)  │   │  Branch (10.0.1.1) │
-  └─────────────┘   └─────────────┘
-```
-
----
-
-## Quick Start
+## 🔧 Quick Start
 
 ### 1 — Install
 
 ```bash
-git clone https://github.com/your-org/fortigate-mcp-server.git
-cd fortigate-mcp-server
 pip install -e .
 ```
 
-### 2 — Configure your FortiGate devices
+or from GitHub:
 
-**Default device** (always required, credentials from env vars):
+```bash
+pip install git+https://github.com/winzeny/fortigate-mcp-server.git
+```
+
+### 2 — Get a FortiGate API Token
+
+1. FortiGate GUI → **System → Administrators** → Create New
+2. Type: **REST API Admin**
+3. Set **Trusted Hosts** to the IP of this server (e.g. your workstation)
+4. Copy the generated token — it is shown **only once**
+
+> ⚠️ Store the token securely. It grants the same privileges as the admin that created it.
+
+### 3 — Configure
+
+**Environment variables** (for the default / primary device):
 
 ```bash
 cp .env.example .env
-# edit .env with your primary FortiGate host and API token
+# edit .env with your FortiGate host and API token
 ```
 
-**Additional devices** — add to `config/devices.yaml`:
+```env
+FORTIGATE_HOST=https://10.0.0.1
+FORTIGATE_API_TOKEN=your-token-here
+FORTIGATE_VDOM=root
+FORTIGATE_INSECURE=false
+```
+
+**Additional devices** — edit `config/devices.yaml`:
 
 ```yaml
 devices:
   - name: hq-fw
     host: https://10.0.0.1
-    api_token: your-hq-token
+    api_token: hq-token
     vdom: root
     verify_ssl: true
 
   - name: branch-fw
     host: https://10.0.1.1
-    api_token: your-branch-token
+    api_token: branch-token
     vdom: root
     verify_ssl: true
+
+  - name: lab-fw
+    host: https://192.168.1.1
+    api_token: lab-token
+    vdom: lab-vdom
+    verify_ssl: false   # self-signed cert only
 ```
 
-#### Getting a FortiGate API Token
-
-1. FortiGate GUI → **System → Administrators** → Create New
-2. Type: **REST API Admin**
-3. Set **Trusted Hosts** to the IP of this server
-4. Copy the generated token — it is shown only once
-
-> ⚠️ Store tokens securely. Never commit `.env` to version control.
-
-### 3 — Register with Hermes Agent
+### 4 — Register with Hermes Agent
 
 Add to **`~/.hermes/config.yaml`**:
 
@@ -104,68 +117,124 @@ mcp_servers:
     args: ["-m", "fortigate_mcp.server"]
 ```
 
-Then restart the gateway:
+Restart the gateway:
 
 ```bash
 hermes gateway restart
 ```
 
-### 4 — Use in plain English
+### 5 — Use in plain English
 
 ```
-AI: "Show me all registered FortiGate devices"
-  → fortigate_list_devices()
+You: Show me all registered FortiGate devices
+→ fortigate_list_devices()
 
-AI: "List firewall policies on the branch firewall"
-  → fortigate_list_policies(device="branch-fw")
+You: List firewall policies on the branch firewall
+→ fortigate_list_policies(device="branch-fw")
 
-AI: "Create an address object for the internal network 10.0.0.0/24 called internalLan on the HQ firewall"
-  → fortigate_create_address(
-      name="internalLan",
-      address_type="ipmask",
-      address="10.0.0.0/24",
-      device="hq-fw"
-    )
+You: Create an address for the internal network 10.0.0.0/24 called internalLAN
+→ fortigate_create_address(
+     name="internalLAN",
+     address_type="ipmask",
+     address="10.0.0.0/24",
+     device="hq-fw"
+   )
+
+You: Create a policy allowing port 443 from internalLAN to any
+→ fortigate_create_policy(
+     src_intf="port1",
+     dst_intf="port2",
+     src_addr="internalLAN",
+     dst_addr="all",
+     service="HTTPS",
+     device="hq-fw"
+   )
 ```
 
 ---
 
-## Multi-Device Design
+## 📐 Architecture
 
 ```
-.env                          config/devices.yaml
-────────────                  ─────────────────────
-FORTIGATE_HOST ──────────►  [default device]
-FORTIGATE_API_TOKEN ──────►
-FORTIGATE_VDOM ──────────►
-FORTIGATE_INSECURE ──────►  [additional devices...]
-                              - hq-fw
-                              - branch-fw
-                              - lab-fw
+┌─────────────────────────────────────────────────────────┐
+│                     AI Agent                            │
+│   (Hermes Agent, Claude Code, any MCP client)          │
+└─────────────────────┬───────────────────────────────────┘
+                      │  stdio · JSON-RPC
+                      ▼
+          ┌───────────────────────────┐
+          │   fortigate-mcp-server   │
+          │  python -m fortigate_mcp  │
+          └─────────────┬─────────────┘
+                        │  HTTPS + Bearer Token
+          ┌─────────────┼─────────────┐
+          ▼             ▼             ▼
+    ┌──────────┐ ┌──────────┐ ┌──────────┐
+    │  HQ FW   │ │ Branch FW│ │  Lab FW  │
+    │10.0.0.1  │ │10.0.1.1  │ │192.168.1.1│
+    └──────────┘ └──────────┘ └──────────┘
 ```
-
-The AI calls `fortigate_list_devices()` first to discover what's available. All subsequent tools accept an optional `device` parameter — omitting it targets the default device (env vars).
 
 ---
 
-## Security Notes
+## 🔐 Security
 
-* Each API token grants the same privileges as the admin that created it — follow the **principle of least privilege**
-* Set a **Trusted Host** on each REST API admin so tokens only work from your management subnet
-* Never commit `.env` or any file containing real credentials to version control
-* Use `verify_ssl: false` only for devices with self-signed certificates (lab/dev only)
+| Rule | Why |
+|------|-----|
+| Use **Trusted Hosts** on REST API admins | Token only works from your management subnet |
+| Principle of **least privilege** | Give each token only the permissions it needs |
+| Never commit `.env` or `devices.yaml` | Both contain secrets — keep them local |
+| `verify_ssl: false` only for lab/dev | Self-signed certs are not safe in production |
 
 ---
 
-## Development
+## 📁 Project Structure
+
+```
+fortigate-mcp-server/
+├── README.md
+├── pyproject.toml
+├── .env.example
+├── .gitignore
+├── config/
+│   └── devices.yaml          ← add your devices here
+└── src/fortigate_mcp/
+    ├── __init__.py
+    ├── client.py             ← async FortiGate REST API client + registry
+    ├── tools.py              ← 14 MCP tool implementations
+    └── server.py             ← MCP stdio server entry point
+```
+
+---
+
+## 🧪 Development
 
 ```bash
-# Install dev dependencies
+# Install with dev dependencies
 pip install -e ".[dev]"
 
-# Verify all imports and tool registration
-python -c "from fortigate_mcp import tools; from fortigate_mcp.server import _make_tools; print(f'{len(_make_tools())} tools OK')"
+# Verify tool registration
+python -c "
+from fortigate_mcp.server import _make_tools
+print(f'{len(_make_tools())} tools registered')
+"
 
-# Run tests (when added)
+# Run tests
 pytest
+
+# Lint
+ruff check src/
 ```
+
+---
+
+## 📄 License
+
+MIT License — free to use, modify, and distribute.
+
+---
+
+## 🙏 Credits
+
+Built with [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
+and [httpx](https://www.python-httpx.org/). Compatible with any MCP-compatible AI agent.
