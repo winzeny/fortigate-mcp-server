@@ -1,26 +1,25 @@
 # config/devices.yaml.example
-# ──────────────────────────────────────────────────────────────────────────────
 # Template for config/devices.yaml
 # COPY this file to config/devices.yaml and fill in your real device info.
 # The .yaml file is git-ignored; the .example file is tracked.
-# ──────────────────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
 
 devices:
-  # ── Example: Main HQ Firewall ────────────────────────────────────────────
+  # Example: Main HQ Firewall
   # - name: hq-fw
   #   host: https://10.0.0.1
   #   api_token: your-token-here
   #   vdom: root
   #   verify_ssl: true
 
-  # ── Example: Branch Office Firewall ─────────────────────────────────────
+  # Example: Branch Office Firewall
   # - name: branch-fw
   #   host: https://10.1.1.1
   #   api_token: your-token-here
   #   vdom: root
   #   verify_ssl: true
 
-  # ── Example: Lab/Dev Firewall (self-signed cert) ─────────────────────────
+  # Example: Lab/Dev Firewall (self-signed cert)
   # - name: lab-fw
   #   host: https://192.168.1.1
   #   api_token: your-token-here
