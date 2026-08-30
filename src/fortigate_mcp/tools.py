@@ -537,3 +537,117 @@ async def fortigate_get_bgp_rib(device: str = "default") -> str:
         return _ok(data)
     except Exception as e:
         return _err(str(e))
+
+
+# ─── OSPF Tools ────────────────────────────────────────────────────────────────
+
+async def fortigate_get_ospf_config(device: str = "default") -> str:
+    """Get OSPF router configuration — area, networks, passive interfaces."""
+    try:
+        data = await _reg().get_client(device).get_ospf_config()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_ospf_neighbor(device: str = "default") -> str:
+    """List OSPF neighbor table — router-id, state (Full/2-Way), interface, dead timer."""
+    try:
+        data = await _reg().get_client(device).list_ospf_neighbor()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_ospf_interface(device: str = "default") -> str:
+    """Get OSPF interface configurations — area, cost, hello/dead intervals."""
+    try:
+        data = await _reg().get_client(device).get_ospf_interface()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_ospf_network(device: str = "default") -> str:
+    """Get OSPF network definitions — area, prefix."""
+    try:
+        data = await _reg().get_client(device).get_ospf_network()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_ospf_status(device: str = "default") -> str:
+    """Get live OSPF LSDB and routing information."""
+    try:
+        data = await _reg().get_client(device).get_ospf_status()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── RIP Tools ────────────────────────────────────────────────────────────────
+
+async def fortigate_get_rip_config(device: str = "default") -> str:
+    """Get RIP router configuration — version, timers, passive interfaces."""
+    try:
+        data = await _reg().get_client(device).get_rip_config()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_rip_neighbor(device: str = "default") -> str:
+    """List RIP neighbor table."""
+    try:
+        data = await _reg().get_client(device).list_rip_neighbor()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_rip_status(device: str = "default") -> str:
+    """Get live RIP routing table — learned routes and metrics."""
+    try:
+        data = await _reg().get_client(device).get_rip_status()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── Route Map / Prefix List / Access List ───────────────────────────────────
+
+async def fortigate_list_route_maps(device: str = "default") -> str:
+    """List configured route maps — used for routing policy control."""
+    try:
+        data = await _reg().get_client(device).list_route_maps()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_prefix_lists(device: str = "default") -> str:
+    """List configured IPv4 prefix lists — used for BGP/OSPF route filtering."""
+    try:
+        data = await _reg().get_client(device).list_prefix_lists()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_prefix_list6(device: str = "default") -> str:
+    """List configured IPv6 prefix lists."""
+    try:
+        data = await _reg().get_client(device).list_prefix_list6()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_access_lists(device: str = "default") -> str:
+    """List configured access (route) lists — legacy route filtering."""
+    try:
+        data = await _reg().get_client(device).list_access_lists()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))

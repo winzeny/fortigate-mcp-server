@@ -307,6 +307,64 @@ class FortiGateClient:
         """Return BGP Routing Information Base (RIB) — learned routes."""
         return await self._get("/monitor/router/bgp/rib")
 
+    # ── OSPF ──────────────────────────────────────────────
+
+    async def get_ospf_config(self) -> dict[str, Any]:
+        """Return OSPF router configuration — area, networks, passive interfaces."""
+        return await self._get("/cmdb/router/ospf", scope="vdom")
+
+    async def list_ospf_neighbor(self) -> list[dict[str, Any]]:
+        """Return OSPF neighbor table — router-id, state, interface, dead timer."""
+        return await self._get("/cmdb/router/ospf/neighbor", scope="vdom")
+
+    async def get_ospf_interface(self) -> list[dict[str, Any]]:
+        """Return OSPF interface configurations — area, cost, hello/dead intervals."""
+        return await self._get("/cmdb/router/ospf/interface", scope="vdom")
+
+    async def get_ospf_network(self) -> list[dict[str, Any]]:
+        """Return OSPF network definitions — area, prefix."""
+        return await self._get("/cmdb/router/ospf/network", scope="vdom")
+
+    async def get_ospf_status(self) -> dict[str, Any]:
+        """Return live OSPF LSDB and routing info."""
+        return await self._get("/monitor/router/ospf/overview")
+
+    # ── RIP ───────────────────────────────────────────────
+
+    async def get_rip_config(self) -> dict[str, Any]:
+        """Return RIP router configuration."""
+        return await self._get("/cmdb/router/rip", scope="vdom")
+
+    async def list_rip_neighbor(self) -> list[dict[str, Any]]:
+        """Return RIP neighbor table."""
+        return await self._get("/cmdb/router/rip/neighbor", scope="vdom")
+
+    async def get_rip_status(self) -> dict[str, Any]:
+        """Return live RIP routing table."""
+        return await self._get("/monitor/router/rip")
+
+    # ── Route Map ────────────────────────────────────────
+
+    async def list_route_maps(self) -> list[dict[str, Any]]:
+        """Return configured route maps."""
+        return await self._get("/cmdb/router/route-map", scope="vdom")
+
+    # ── Prefix List ──────────────────────────────────────
+
+    async def list_prefix_lists(self) -> list[dict[str, Any]]:
+        """Return configured prefix lists."""
+        return await self._get("/cmdb/router/prefix-list", scope="vdom")
+
+    async def list_prefix_list6(self) -> list[dict[str, Any]]:
+        """Return configured IPv6 prefix lists."""
+        return await self._get("/cmdb/router/prefix-list6", scope="vdom")
+
+    # ── Route Policy (Access List) ────────────────────────
+
+    async def list_access_lists(self) -> list[dict[str, Any]]:
+        """Return configured access (route) lists."""
+        return await self._get("/cmdb/router/access-list", scope="vdom")
+
     # ── System Info (read-only) ────────────────────────────
 
     async def get_system_status(self) -> dict[str, Any]:

@@ -403,6 +403,105 @@ def _make_tools() -> list[Tool]:
                 "properties": {"device": {"type": "string", "default": "default"}},
             },
         ),
+        # ── OSPF ──
+        Tool(
+            name="fortigate_get_ospf_config",
+            description="Get OSPF router configuration — area, networks, passive interfaces.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_ospf_neighbor",
+            description="List OSPF neighbor table — router-id, state (Full/2-Way), interface, dead timer.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_ospf_interface",
+            description="Get OSPF interface configurations — area, cost, hello/dead intervals.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_ospf_network",
+            description="Get OSPF network definitions — area, prefix.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_ospf_status",
+            description="Get live OSPF LSDB and routing information.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── RIP ──
+        Tool(
+            name="fortigate_get_rip_config",
+            description="Get RIP router configuration — version, timers, passive interfaces.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_rip_neighbor",
+            description="List RIP neighbor table.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_rip_status",
+            description="Get live RIP routing table — learned routes and metrics.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── Route Map / Prefix List / Access List ──
+        Tool(
+            name="fortigate_list_route_maps",
+            description="List configured route maps — used for routing policy control.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_prefix_lists",
+            description="List configured IPv4 prefix lists — used for BGP/OSPF route filtering.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_prefix_list6",
+            description="List configured IPv6 prefix lists.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_access_lists",
+            description="List configured access (route) lists — legacy route filtering.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
         # ── System (read-only) ──
         Tool(
             name="fortigate_get_status",
@@ -509,6 +608,21 @@ async def _call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
         "fortigate_list_bgp_networks": lambda: ft.fortigate_list_bgp_networks(device=dev),
         "fortigate_get_bgp_neighbor_status": lambda: ft.fortigate_get_bgp_neighbor_status(device=dev),
         "fortigate_get_bgp_rib": lambda: ft.fortigate_get_bgp_rib(device=dev),
+        # OSPF
+        "fortigate_get_ospf_config": lambda: ft.fortigate_get_ospf_config(device=dev),
+        "fortigate_list_ospf_neighbor": lambda: ft.fortigate_list_ospf_neighbor(device=dev),
+        "fortigate_get_ospf_interface": lambda: ft.fortigate_get_ospf_interface(device=dev),
+        "fortigate_get_ospf_network": lambda: ft.fortigate_get_ospf_network(device=dev),
+        "fortigate_get_ospf_status": lambda: ft.fortigate_get_ospf_status(device=dev),
+        # RIP
+        "fortigate_get_rip_config": lambda: ft.fortigate_get_rip_config(device=dev),
+        "fortigate_list_rip_neighbor": lambda: ft.fortigate_list_rip_neighbor(device=dev),
+        "fortigate_get_rip_status": lambda: ft.fortigate_get_rip_status(device=dev),
+        # Route Map / Prefix List / Access List
+        "fortigate_list_route_maps": lambda: ft.fortigate_list_route_maps(device=dev),
+        "fortigate_list_prefix_lists": lambda: ft.fortigate_list_prefix_lists(device=dev),
+        "fortigate_list_prefix_list6": lambda: ft.fortigate_list_prefix_list6(device=dev),
+        "fortigate_list_access_lists": lambda: ft.fortigate_list_access_lists(device=dev),
         # System
         "fortigate_get_status": lambda: ft.fortigate_get_status(device=dev),
         "fortigate_get_license": lambda: ft.fortigate_get_license(device=dev),

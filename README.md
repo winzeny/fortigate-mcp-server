@@ -21,7 +21,7 @@ type-safe set of tools — no CLI expertise or API knowledge required.
 
 ---
 
-## 🛠️ Available Tools (41 total)
+## 🛠️ Available Tools (53 total)
 
 Every tool accepts an optional `device` parameter to target a specific FortiGate.
 
@@ -96,6 +96,33 @@ Every tool accepts an optional `device` parameter to target a specific FortiGate
 | `fortigate_list_bgp_networks` | BGP advertised networks |
 | `fortigate_get_bgp_neighbor_status` | Live neighbor status — Established/Idle, prefix counts, uptime |
 | `fortigate_get_bgp_rib` | BGP RIB — all learned routes with next-hop and AS-path |
+
+### 🔁 OSPF
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_get_ospf_config` | OSPF router config — area, networks, passive interfaces |
+| `fortigate_list_ospf_neighbor` | OSPF neighbor table — router-id, state, interface, dead timer |
+| `fortigate_get_ospf_interface` | OSPF interface configs — area, cost, hello/dead intervals |
+| `fortigate_get_ospf_network` | OSPF network definitions — area, prefix |
+| `fortigate_get_ospf_status` | Live OSPF LSDB and routing info |
+
+### 📡 RIP
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_get_rip_config` | RIP router config — version, timers, passive interfaces |
+| `fortigate_list_rip_neighbor` | RIP neighbor table |
+| `fortigate_get_rip_status` | Live RIP routing table — learned routes and metrics |
+
+### 🎛️ Route Policy
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_route_maps` | Route maps — used for routing policy control |
+| `fortigate_list_prefix_lists` | IPv4 prefix lists — BGP/OSPF route filtering |
+| `fortigate_list_prefix_list6` | IPv6 prefix lists |
+| `fortigate_list_access_lists` | Access (route) lists — legacy route filtering |
 
 ### 🖥️ System
 
