@@ -21,7 +21,8 @@ ENV/
 
 # ─── Local config (contains secrets) ─────────────────────────────────────
 .env
-config/devices.yaml
+config/devices.yaml        # real credentials — DO NOT commit
+!config/devices.yaml.example  # template — tracked, safe to share
 
 # ─── Test / Coverage ──────────────────────────────────────────────────────
 .pytest_cache/
