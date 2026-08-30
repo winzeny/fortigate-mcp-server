@@ -21,7 +21,7 @@ type-safe set of tools — no CLI expertise or API knowledge required.
 
 ---
 
-## 🛠️ Available Tools (36 total)
+## 🛠️ Available Tools (41 total)
 
 Every tool accepts an optional `device` parameter to target a specific FortiGate.
 
@@ -86,6 +86,16 @@ Every tool accepts an optional `device` parameter to target a specific FortiGate
 | `fortigate_list_dhcp_leases` | Current DHCP leases |
 | `fortigate_list_arp_table` | ARP table (IP → MAC) |
 | `fortigate_list_sessions` | Active firewall sessions (filterable) |
+
+### 🔀 BGP
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_get_bgp_config` | BGP router config — AS number, router-id, neighbors |
+| `fortigate_list_bgp_neighbors` | Configured BGP neighbors — remote AS, IP, description |
+| `fortigate_list_bgp_networks` | BGP advertised networks |
+| `fortigate_get_bgp_neighbor_status` | Live neighbor status — Established/Idle, prefix counts, uptime |
+| `fortigate_get_bgp_rib` | BGP RIB — all learned routes with next-hop and AS-path |
 
 ### 🖥️ System
 

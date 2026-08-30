@@ -362,6 +362,47 @@ def _make_tools() -> list[Tool]:
                 "properties": {"device": {"type": "string", "default": "default"}},
             },
         ),
+        # ── BGP ──
+        Tool(
+            name="fortigate_get_bgp_config",
+            description="Get BGP router configuration — AS number, router-id, neighbors, networks.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_bgp_neighbors",
+            description="List configured BGP neighbors — remote AS, IP, description.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_bgp_networks",
+            description="List BGP advertised networks — prefix and associated route map.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_bgp_neighbor_status",
+            description="Get live BGP neighbor status — Established/Idle, prefix counts, uptime, last update.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_bgp_rib",
+            description="Get BGP Routing Information Base (RIB) — all learned BGP routes with next-hop and AS-path.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
         # ── System (read-only) ──
         Tool(
             name="fortigate_get_status",
@@ -462,6 +503,12 @@ async def _call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
         ),
         # HA
         "fortigate_get_ha_status": lambda: ft.fortigate_get_ha_status(device=dev),
+        # BGP
+        "fortigate_get_bgp_config": lambda: ft.fortigate_get_bgp_config(device=dev),
+        "fortigate_list_bgp_neighbors": lambda: ft.fortigate_list_bgp_neighbors(device=dev),
+        "fortigate_list_bgp_networks": lambda: ft.fortigate_list_bgp_networks(device=dev),
+        "fortigate_get_bgp_neighbor_status": lambda: ft.fortigate_get_bgp_neighbor_status(device=dev),
+        "fortigate_get_bgp_rib": lambda: ft.fortigate_get_bgp_rib(device=dev),
         # System
         "fortigate_get_status": lambda: ft.fortigate_get_status(device=dev),
         "fortigate_get_license": lambda: ft.fortigate_get_license(device=dev),

@@ -285,6 +285,28 @@ class FortiGateClient:
         """Return HA cluster status and member info."""
         return await self._get("/monitor/cluster/ha")
 
+    # ── BGP ───────────────────────────────────────────────
+
+    async def get_bgp_config(self) -> dict[str, Any]:
+        """Return BGP router configuration (AS number, router-id, neighbors, networks)."""
+        return await self._get("/cmdb/router/bgp", scope="vdom")
+
+    async def list_bgp_neighbors(self) -> list[dict[str, Any]]:
+        """Return configured BGP neighbors."""
+        return await self._get("/cmdb/router/bgp/neighbor", scope="vdom")
+
+    async def list_bgp_networks(self) -> list[dict[str, Any]]:
+        """Return BGP advertised networks."""
+        return await self._get("/cmdb/router/bgp/network", scope="vdom")
+
+    async def get_bgp_neighbor_status(self) -> dict[str, Any]:
+        """Return live BGP neighbor status — state, prefix counts, uptime."""
+        return await self._get("/monitor/router/bgp/neighbors")
+
+    async def get_bgp_rib(self) -> dict[str, Any]:
+        """Return BGP Routing Information Base (RIB) — learned routes."""
+        return await self._get("/monitor/router/bgp/rib")
+
     # ── System Info (read-only) ────────────────────────────
 
     async def get_system_status(self) -> dict[str, Any]:

@@ -487,3 +487,53 @@ async def fortigate_get_ha_status(device: str = "default") -> str:
         return _ok(data)
     except Exception as e:
         return _err(str(e))
+
+
+# ─── BGP Tools ────────────────────────────────────────────────────────────────
+
+async def fortigate_get_bgp_config(device: str = "default") -> str:
+    """
+    Get BGP router configuration — AS number, router-id, local preference.
+    Shows which neighbors and networks are configured.
+    """
+    try:
+        data = await _reg().get_client(device).get_bgp_config()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_bgp_neighbors(device: str = "default") -> str:
+    """List configured BGP neighbors — remote AS, IP, description."""
+    try:
+        data = await _reg().get_client(device).list_bgp_neighbors()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_bgp_networks(device: str = "default") -> str:
+    """List BGP advertised networks — prefix, route map."""
+    try:
+        data = await _reg().get_client(device).list_bgp_networks()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_bgp_neighbor_status(device: str = "default") -> str:
+    """Get live BGP neighbor status — Established/Idle, prefix counts, uptime, last update."""
+    try:
+        data = await _reg().get_client(device).get_bgp_neighbor_status()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_bgp_rib(device: str = "default") -> str:
+    """Get BGP Routing Information Base (RIB) — all learned BGP routes with next-hop and AS-path."""
+    try:
+        data = await _reg().get_client(device).get_bgp_rib()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
