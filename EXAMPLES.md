@@ -693,3 +693,189 @@ fortigate_list_rip_neighbor(device="hq-fw")
 ```
 fortigate_get_rip_status(device="hq-fw")
 ```
+
+---
+
+## 🚨 Top 20 Scenarios ที่ใช้กันบ่อยที่สุด
+
+---
+
+### 1. "เช็ค Firewall ตอนเช้า — ทุกอย่างปกติไหม?"
+```
+fortigate_get_status(device="hq-fw")
+```
+**ดู:** serial, firmware version, HA mode, uptime
+**วิเคราะห์:** uptime ควรจะเป็นวันๆ ไม่ใช่ชั่วโมง — ถ้า reboot เอง ต้องเช็ค logs ต่อ
+
+---
+
+### 2. "มีใคร login เข้า firewall วันนี้?"
+```
+fortigate_get_log_events(filter="subtype=admin", device="hq-fw")
+```
+**ดู:** admin login, logout, failed login attempts
+**วิเคราะห์:** failed login เยอะๆ = มีคนพยายาม bruteforce!
+
+---
+
+### 3. "ดู interfaces ทั้งหมด — ตัวไหน down?"
+```
+fortigate_list_interfaces(device="hq-fw")
+```
+**ดู:** IP, status (up/down), speed, duplex
+**วิเคราะห์:** status=down = cable หลุดหรือ port ที่ switch ปิด
+
+---
+
+### 4. "ดู policies ทั้งหมด — มีกี่ policy, อะไรบ้าง?"
+```
+fortigate_list_policies(device="hq-fw")
+```
+**ดู:** policy ID, src/dst interface, src/dst addr, service, action
+**วิเคราะห์:** policy เรียงจากบนลงล่าง — policy แรกที่ match จะถูกใช้
+
+---
+
+### 5. "มีใคร connect SSLVPN อยู่บ้าง?"
+```
+fortigate_list_sslvpn_connections(device="hq-fw")
+```
+**ดู:** user, IP ที่ได้, group, login time, duration
+**วิเคราะห์:** duration มากกว่า 8 ชม. = user อาจลืม disconnect
+
+---
+
+### 6. "เช็ค SD-WAN links — ตัวไหน down หรือมีปัญหา?"
+```
+fortigate_get_sdwan_status(device="hq-fw")
+```
+**ดู:** latency, jitter, packet-loss ของแต่ละ member
+**วิเคราะห์:** member ที่ `sla_pass: false` = link มีปัญหา, traffic ถูก steer ไป member อื่น
+
+---
+
+### 7. "ดู attack/intrusion logs วันนี้"
+```
+fortigate_get_attack_logs(device="hq-fw")
+```
+**ดู:** signature, severity, source IP, destination IP
+**วิเคราะห์:** severity=critical = ต้องตรวจสอบ urgent!, high = ต้องจับตา
+
+---
+
+### 8. "ดู DHCP leases — IP อะไรถูกจ่ายไป, เครื่องอะไร?"
+```
+fortigate_list_dhcp_leases(device="hq-fw")
+```
+**ดู:** IP, MAC, hostname, expiry time
+**วิเคราะห์:** hostname ช่วยระบุเครื่องได้เร็ว — expiry ใกล้หมด = เครื่องนั้นยัง active
+
+---
+
+### 9. "WiFi AP ตัวไหน offline?"
+```
+fortigate_list_wifi_ap(device="hq-fw")
+```
+**ดู:** AP name, model, IP, status (up/down), client count
+**วิเคราะห์:** status=down = AP ปิดหรือไฟไม่ถึง — client count มากผิดปกติ = อาจมีคน rogue AP
+
+---
+
+### 10. "ดู static routes ทั้งหมด"
+```
+fortigate_list_routes(device="hq-fw")
+```
+**ดู:** destination, gateway, device, distance, priority
+**วิเคราะห์:** ดู default route (0.0.0.0/0) ว่าชี้ไป gateway ไหน
+
+---
+
+### 11. "เช็ค HA cluster — unit ไหนเป็น primary?"
+```
+fortigate_get_ha_status(device="hq-fw")
+```
+**ดู:** unit name, role (primary/secondary), sync status
+**วิเคราะห์:** sync_status != in-sync = config อาจไม่ sync กัน — ต้องดูทันที
+
+---
+
+### 12. "ดู traffic ที่โดน deny ใน 1 ชม."
+```
+fortigate_get_traffic_logs(filter="action=deny", device="hq-fw")
+```
+**ดู:** source, destination, service, time
+**วิเคราะห์:** deny เยอะๆ จาก IP เดียวกัน = scan หรือ bruteforce
+
+---
+
+### 13. "ดู DNS queries — เครื่องใน network เข้าเว็บอะไรบ้าง?"
+```
+fortigate_get_dns_logs(device="hq-fw")
+```
+**ดู:** domain, IP ที่ resolve, query type (A, AAAA, MX)
+**วิเคราะห์:** domain แปลกๆ = เครื่องอาจติด malware
+
+---
+
+### 14. "ดู IPSec VPN tunnels — ตัวไหน up?"
+```
+fortigate_list_ipsec_connections(device="hq-fw")
+```
+**ดู:** tunnel name, status, bytes in/out
+**วิเคราะห์:** status=down = phase1/phase2 mismatch หรือ ISP มีปัญหา
+
+---
+
+### 15. "ดู BGP neighbors — neighbor ตัวไหนยังไม่ up?"
+```
+fortigate_get_bgp_neighbor_status(device="hq-fw")
+```
+**ดู:** neighbor IP, remote AS, state, prefix count, uptime
+**วิเคราะห์:** state=Idle = session ยังไม่ตั้ง — state=Established = BGP ทำงานปกติ
+
+---
+
+### 16. "ดู OSPF neighbors — ตัวไหนยังไม่ Full?"
+```
+fortigate_list_ospf_neighbor(device="hq-fw")
+```
+**ดู:** router-id, state, interface, dead timer
+**วิเคราะห์:** state=2-Way = DR/BDR election ยังไม่เสร็จ — state=Full = เรียบร้อย
+
+---
+
+### 17. "ดู authenticated users — ใคร login อยู่บน firewall?"
+```
+fortigate_list_authenticated_users(device="hq-fw")
+```
+**ดู:** username, auth method, IP, login time
+**วิเคราะห์:** user ที่ login นานผิดปกติ = อาจไม่ใช่เจ้าของ
+
+---
+
+### 18. "เช็ค license — อะไรหมดอายุบ้าง?"
+```
+fortigate_get_license(device="hq-fw")
+```
+**ดู:** FortiCare, AV, IPS, Web Filter, VM license
+**วิเคราะห์:** license หมด = feature นั้นหยุดทำงาน
+
+---
+
+### 19. "ดู session table — มี connection เท่าไหร่?"
+```
+fortigate_list_sessions(device="hq-fw")
+```
+**ดู:** source, destination, protocol, state, byte count
+**วิเคราะห์:** session count สูงผิดปกติ = อาจมี worm หรือ DDoS
+
+---
+
+### 20. "ดู ARP table — IP นี้ MAC address อะไร?"
+```
+fortigate_list_arp_table(device="hq-fw")
+```
+**ดู:** IP, MAC, interface
+**วิเคราะห์:** IP ที่ไม่รู้จักใน ARP = อาจมี ARP spoofing
+
+---
