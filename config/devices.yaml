@@ -1,28 +1,28 @@
-# config/devices.yaml.example
+# config/devices.yaml
 # ──────────────────────────────────────────────────────────────────────────────
-# Template for config/devices.yaml
-# COPY this file to config/devices.yaml and fill in your real device info.
-# The .yaml file is git-ignored; the .example file is tracked.
+# Add one entry per FortiGate device.
+# The device named "default" is reserved for env-var credentials;
+# entries below are merged in and override any duplicate names.
 # ──────────────────────────────────────────────────────────────────────────────
 
 devices:
   # ── Example: Main HQ Firewall ────────────────────────────────────────────
-  # - name: hq-fw
+  # - name: hq-fw          # registry key used in tool calls
   #   host: https://10.0.0.1
-  #   api_token: your-token-here
+  #   api_token: token-here
   #   vdom: root
   #   verify_ssl: true
 
   # ── Example: Branch Office Firewall ─────────────────────────────────────
   # - name: branch-fw
-  #   host: https://10.1.1.1
-  #   api_token: your-token-here
+  #   host: https://10.0.1.1
+  #   api_token: token-here
   #   vdom: root
   #   verify_ssl: true
 
   # ── Example: Lab/Dev Firewall (self-signed cert) ─────────────────────────
   # - name: lab-fw
   #   host: https://192.168.1.1
-  #   api_token: your-token-here
+  #   api_token: token-here
   #   vdom: lab-vdom
-  #   verify_ssl: false
+  #   verify_ssl: false      # set false for self-signed certs only
