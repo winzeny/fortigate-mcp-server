@@ -177,12 +177,75 @@ You: Create a policy allowing port 443 from internalLAN to any
 
 ---
 
-## 🔐 Security
+## 🛡️ FortiGate Setup
+
+The server talks to FortiGate through its REST API. No agent or package needs to be installed on the firewall itself.
+
+### 1 — Create a REST API Admin
+
+```
+FortiGate GUI → System → Administrators → Create New
+```
+
+| Field | Value |
+|-------|-------|
+| **Type** | `REST API Admin` |
+| **Username** | `mcp-server` (or any name) |
+| **Trusted Hosts** | `IP of the machine running this server` — e.g. `192.168.1.100/32` |
+| **Admin Profile** | `super_admin` (or a custom profile, see below) |
+| **VDOM** | `root` (or the VDOM you want to manage) |
+
+> ⚠️ **Trusted Hosts is critical.** Without it, anyone with the token can access your FortiGate from any IP.
+
+### 2 — Copy the API Token
+
+After clicking **OK**, a popup will show the **API Token**. Copy and store it immediately — it is shown **only once**.
+
+```
+┌──────────────────────────────────────────────┐
+│  Your API Token                             │
+│  ════════════════════════════════════════   │
+│  nxxxxxxx0qGzP8xxxxxxxxxxxxxxxxxxxxxxxxxx  │
+│                                              │
+│  ⚠️ Copy and store this token securely.    │
+│     It will not be shown again.             │
+└──────────────────────────────────────────────┘
+```
+
+### 3 — Minimum Admin Profile (Optional)
+
+Instead of `super_admin`, create a custom profile with only the permissions the MCP server needs:
+
+| Permission | Required For |
+|------------|-------------|
+| `firewall address` — Read/Write | Create/delete address objects |
+| `firewall policy` — Read/Write | Create/delete policies |
+| `firewall service` — Read/Write | Create/delete service objects |
+| `system interface` — Read | List interfaces |
+| `router static` — Read | List routes |
+| `system performance` — Read | Get system status |
+| `system license` — Read | Get license info |
+
+### 4 — Verify Connectivity
+
+From the machine running the MCP server, test that the token works:
+
+```bash
+curl -s -X GET "https://<FORTIGATE_IP>/api/v2/monitor/system/status" \
+  -H "Authorization: Bearer <YOUR_TOKEN>" \
+  -H "Content-Type: application/json"
+```
+
+A valid JSON response means the firewall is ready. Paste the token into your `.env` or `config/devices.yaml` and the MCP server will connect automatically.
+
+---
+
+## 🔐 Security Best Practices
 
 | Rule | Why |
 |------|-----|
-| Use **Trusted Hosts** on REST API admins | Token only works from your management subnet |
-| Principle of **least privilege** | Give each token only the permissions it needs |
+| Always set **Trusted Hosts** | Token only works from your management subnet |
+| Follow **least privilege** | Give each token only the permissions it needs |
 | Never commit `.env` or `devices.yaml` | Both contain secrets — keep them local |
 | `verify_ssl: false` only for lab/dev | Self-signed certs are not safe in production |
 
