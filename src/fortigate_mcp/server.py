@@ -59,11 +59,7 @@ def _make_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "device": {
-                        "type": "string",
-                        "default": "default",
-                        "description": "FortiGate device name (from fortigate_list_devices)",
-                    },
+                    "device": {"type": "string", "default": "default", "description": "FortiGate device name"},
                 },
             },
         ),
@@ -74,10 +70,7 @@ def _make_tools() -> list[Tool]:
                 "type": "object",
                 "properties": {
                     "name": {"type": "string", "description": "Unique address object name"},
-                    "address_type": {
-                        "type": "string",
-                        "enum": ["ipmask", "iprange", "fqdn", "dynamic"],
-                    },
+                    "address_type": {"type": "string", "enum": ["ipmask", "iprange", "fqdn", "dynamic"]},
                     "address": {"type": "string", "description": "IP/CIDR, range, or FQDN"},
                     "interface": {"type": "string", "description": "Bound interface (optional)"},
                     "comment": {"type": "string", "description": "Description (optional)"},
@@ -91,10 +84,7 @@ def _make_tools() -> list[Tool]:
             description="Delete a firewall address object by name.",
             inputSchema={
                 "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "device": {"type": "string", "default": "default"},
-                },
+                "properties": {"name": {"type": "string"}, "device": {"type": "string", "default": "default"}},
                 "required": ["name"],
             },
         ),
@@ -131,10 +121,7 @@ def _make_tools() -> list[Tool]:
             description="Delete a firewall policy by its numeric ID.",
             inputSchema={
                 "type": "object",
-                "properties": {
-                    "policy_id": {"type": "integer"},
-                    "device": {"type": "string", "default": "default"},
-                },
+                "properties": {"policy_id": {"type": "integer"}, "device": {"type": "string", "default": "default"}},
                 "required": ["policy_id"],
             },
         ),
@@ -167,10 +154,7 @@ def _make_tools() -> list[Tool]:
             description="Delete a custom firewall service by name.",
             inputSchema={
                 "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "device": {"type": "string", "default": "default"},
-                },
+                "properties": {"name": {"type": "string"}, "device": {"type": "string", "default": "default"}},
                 "required": ["name"],
             },
         ),
@@ -191,6 +175,193 @@ def _make_tools() -> list[Tool]:
                 "properties": {"device": {"type": "string", "default": "default"}},
             },
         ),
+        # ── SSLVPN ──
+        Tool(
+            name="fortigate_list_sslvpn_settings",
+            description="Get SSLVPN portal settings — IP pool, DNS, tunnel mode, portal type.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_sslvpn_users",
+            description="List local SSL VPN users on the FortiGate.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_sslvpn_groups",
+            description="List SSL VPN user groups on the FortiGate.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_sslvpn_connections",
+            description="List active SSLVPN connections — shows who is connected right now.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── IPSec VPN ──
+        Tool(
+            name="fortigate_list_ipsec_phase1",
+            description="List IPSec phase-1 (IKE) tunnel configurations — name, remote gateway, interface.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_ipsec_phase2",
+            description="List IPSec phase-2 (ESP) tunnel configurations — phase1 association, crypto settings.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_ipsec_connections",
+            description="List active IPSec VPN tunnel status — shows which tunnels are up and byte counts.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── User / Authentication ──
+        Tool(
+            name="fortigate_list_users",
+            description="List local user accounts on the FortiGate.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_user_groups",
+            description="List local user groups on the FortiGate.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_authenticated_users",
+            description="List currently authenticated firewall users — who is actively logged in.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── WiFi Controller ──
+        Tool(
+            name="fortigate_list_wifi_ap",
+            description="List managed Access Points (AP) — name, model, IP, status, client count.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_wifi_ssid",
+            description="List SSID (WLAN) configurations — SSID name, security, VLAN, AP.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_wifi_clients",
+            description="List connected WiFi clients — shows who is on the wireless network.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── Security Profiles ──
+        Tool(
+            name="fortigate_list_antivirus_profiles",
+            description="List antivirus profiles configured on the FortiGate.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_ips_profiles",
+            description="List IPS (Intrusion Prevention System) sensor profiles.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_webfilter_profiles",
+            description="List web filter profiles configured on the FortiGate.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_application_lists",
+            description="List application control lists (application signatures).",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── DHCP ──
+        Tool(
+            name="fortigate_list_dhcp_server",
+            description="List DHCP server configurations — scope, range, gateway, lease time.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_dhcp_leases",
+            description="List current DHCP leases — shows assigned IPs, MACs, hostnames, expiry.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        # ── ARP / Sessions ──
+        Tool(
+            name="fortigate_list_arp_table",
+            description="List the ARP table — IP to MAC address mappings.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_sessions",
+            description="List active firewall sessions — optionally filter by source IP, destination, etc.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filter": {"type": "string", "description": "Filter string, e.g. 'srcaddr=10.0.0.1'"},
+                    "device": {"type": "string", "default": "default"},
+                },
+            },
+        ),
+        # ── HA ──
+        Tool(
+            name="fortigate_get_ha_status",
+            description="Get HA cluster status — which unit is primary, sync state, member list.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
         # ── System (read-only) ──
         Tool(
             name="fortigate_get_status",
@@ -202,7 +373,7 @@ def _make_tools() -> list[Tool]:
         ),
         Tool(
             name="fortigate_get_license",
-            description="Get license information for a FortiGate.",
+            description="Get license information — FortiCare, IPS, AV, VM, etc.",
             inputSchema={
                 "type": "object",
                 "properties": {"device": {"type": "string", "default": "default"}},
@@ -215,30 +386,24 @@ def _make_tools() -> list[Tool]:
 
 async def _call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
     args = arguments or {}
+    dev = str(args.get("device", "default"))
 
     dispatch: dict[str, Any] = {
         # Meta
         "fortigate_list_devices": ft.fortigate_list_devices,
         # Addresses
-        "fortigate_list_addresses": lambda: ft.fortigate_list_addresses(
-            device=str(args.get("device", "default")),
-        ),
+        "fortigate_list_addresses": lambda: ft.fortigate_list_addresses(device=dev),
         "fortigate_create_address": lambda: ft.fortigate_create_address(
             name=str(args["name"]),
             address_type=str(args["address_type"]),
             address=str(args["address"]),
             interface=str(args.get("interface", "")),
             comment=str(args.get("comment", "")),
-            device=str(args.get("device", "default")),
+            device=dev,
         ),
-        "fortigate_delete_address": lambda: ft.fortigate_delete_address(
-            name=str(args["name"]),
-            device=str(args.get("device", "default")),
-        ),
+        "fortigate_delete_address": lambda: ft.fortigate_delete_address(name=str(args["name"]), device=dev),
         # Policies
-        "fortigate_list_policies": lambda: ft.fortigate_list_policies(
-            device=str(args.get("device", "default")),
-        ),
+        "fortigate_list_policies": lambda: ft.fortigate_list_policies(device=dev),
         "fortigate_create_policy": lambda: ft.fortigate_create_policy(
             src_intf=str(args["src_intf"]),
             dst_intf=str(args["dst_intf"]),
@@ -248,41 +413,58 @@ async def _call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
             action=str(args.get("action", "accept")),
             schedule=str(args.get("schedule", "always")),
             comment=str(args.get("comment", "")),
-            device=str(args.get("device", "default")),
+            device=dev,
         ),
-        "fortigate_delete_policy": lambda: ft.fortigate_delete_policy(
-            policy_id=int(args["policy_id"]),
-            device=str(args.get("device", "default")),
-        ),
+        "fortigate_delete_policy": lambda: ft.fortigate_delete_policy(policy_id=int(args["policy_id"]), device=dev),
         # Services
-        "fortigate_list_services": lambda: ft.fortigate_list_services(
-            device=str(args.get("device", "default")),
-        ),
+        "fortigate_list_services": lambda: ft.fortigate_list_services(device=dev),
         "fortigate_create_service": lambda: ft.fortigate_create_service(
             name=str(args["name"]),
             protocol=str(args["protocol"]),
             ports=str(args.get("ports", "")),
             comment=str(args.get("comment", "")),
-            device=str(args.get("device", "default")),
+            device=dev,
         ),
-        "fortigate_delete_service": lambda: ft.fortigate_delete_service(
-            name=str(args["name"]),
-            device=str(args.get("device", "default")),
-        ),
+        "fortigate_delete_service": lambda: ft.fortigate_delete_service(name=str(args["name"]), device=dev),
         # Interfaces / Routes
-        "fortigate_list_interfaces": lambda: ft.fortigate_list_interfaces(
-            device=str(args.get("device", "default")),
+        "fortigate_list_interfaces": lambda: ft.fortigate_list_interfaces(device=dev),
+        "fortigate_list_routes": lambda: ft.fortigate_list_routes(device=dev),
+        # SSLVPN
+        "fortigate_list_sslvpn_settings": lambda: ft.fortigate_list_sslvpn_settings(device=dev),
+        "fortigate_list_sslvpn_users": lambda: ft.fortigate_list_sslvpn_users(device=dev),
+        "fortigate_list_sslvpn_groups": lambda: ft.fortigate_list_sslvpn_groups(device=dev),
+        "fortigate_list_sslvpn_connections": lambda: ft.fortigate_list_sslvpn_connections(device=dev),
+        # IPSec
+        "fortigate_list_ipsec_phase1": lambda: ft.fortigate_list_ipsec_phase1(device=dev),
+        "fortigate_list_ipsec_phase2": lambda: ft.fortigate_list_ipsec_phase2(device=dev),
+        "fortigate_list_ipsec_connections": lambda: ft.fortigate_list_ipsec_connections(device=dev),
+        # User / Auth
+        "fortigate_list_users": lambda: ft.fortigate_list_users(device=dev),
+        "fortigate_list_user_groups": lambda: ft.fortigate_list_user_groups(device=dev),
+        "fortigate_list_authenticated_users": lambda: ft.fortigate_list_authenticated_users(device=dev),
+        # WiFi
+        "fortigate_list_wifi_ap": lambda: ft.fortigate_list_wifi_ap(device=dev),
+        "fortigate_list_wifi_ssid": lambda: ft.fortigate_list_wifi_ssid(device=dev),
+        "fortigate_list_wifi_clients": lambda: ft.fortigate_list_wifi_clients(device=dev),
+        # Security Profiles
+        "fortigate_list_antivirus_profiles": lambda: ft.fortigate_list_antivirus_profiles(device=dev),
+        "fortigate_list_ips_profiles": lambda: ft.fortigate_list_ips_profiles(device=dev),
+        "fortigate_list_webfilter_profiles": lambda: ft.fortigate_list_webfilter_profiles(device=dev),
+        "fortigate_list_application_lists": lambda: ft.fortigate_list_application_lists(device=dev),
+        # DHCP
+        "fortigate_list_dhcp_server": lambda: ft.fortigate_list_dhcp_server(device=dev),
+        "fortigate_list_dhcp_leases": lambda: ft.fortigate_list_dhcp_leases(device=dev),
+        # ARP / Sessions
+        "fortigate_list_arp_table": lambda: ft.fortigate_list_arp_table(device=dev),
+        "fortigate_list_sessions": lambda: ft.fortigate_list_sessions(
+            filter=str(args.get("filter", "")),
+            device=dev,
         ),
-        "fortigate_list_routes": lambda: ft.fortigate_list_routes(
-            device=str(args.get("device", "default")),
-        ),
+        # HA
+        "fortigate_get_ha_status": lambda: ft.fortigate_get_ha_status(device=dev),
         # System
-        "fortigate_get_status": lambda: ft.fortigate_get_status(
-            device=str(args.get("device", "default")),
-        ),
-        "fortigate_get_license": lambda: ft.fortigate_get_license(
-            device=str(args.get("device", "default")),
-        ),
+        "fortigate_get_status": lambda: ft.fortigate_get_status(device=dev),
+        "fortigate_get_license": lambda: ft.fortigate_get_license(device=dev),
     }
 
     handler = dispatch.get(name)

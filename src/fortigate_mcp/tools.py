@@ -267,3 +267,223 @@ async def fortigate_get_license(device: str = "default") -> str:
         return _ok(data)
     except Exception as e:
         return _err(str(e))
+
+
+# ─── SSLVPN Tools ──────────────────────────────────────────────────────────────
+
+async def fortigate_list_sslvpn_settings(device: str = "default") -> str:
+    """Get SSLVPN portal settings (IP pool, DNS, tunnel mode, etc.)."""
+    try:
+        data = await _reg().get_client(device).list_sslvpn_settings()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_sslvpn_users(device: str = "default") -> str:
+    """List local SSL VPN users."""
+    try:
+        data = await _reg().get_client(device).list_sslvpn_users()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_sslvpn_groups(device: str = "default") -> str:
+    """List SSL VPN user groups."""
+    try:
+        data = await _reg().get_client(device).list_sslvpn_groups()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_sslvpn_connections(device: str = "default") -> str:
+    """List active SSLVPN connections — shows who is connected right now."""
+    try:
+        data = await _reg().get_client(device).list_sslvpn_connections()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── IPSec VPN Tools ──────────────────────────────────────────────────────────
+
+async def fortigate_list_ipsec_phase1(device: str = "default") -> str:
+    """List IPSec phase-1 (IKE) tunnel configurations."""
+    try:
+        data = await _reg().get_client(device).list_ipsec_phase1()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_ipsec_phase2(device: str = "default") -> str:
+    """List IPSec phase-2 (ESP) tunnel configurations."""
+    try:
+        data = await _reg().get_client(device).list_ipsec_phase2()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_ipsec_connections(device: str = "default") -> str:
+    """List active IPSec VPN tunnel status — shows which tunnels are up."""
+    try:
+        data = await _reg().get_client(device).list_ipsec_connections()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── User / Authentication Tools ─────────────────────────────────────────────
+
+async def fortigate_list_users(device: str = "default") -> str:
+    """List local user accounts on the FortiGate."""
+    try:
+        data = await _reg().get_client(device).list_users()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_user_groups(device: str = "default") -> str:
+    """List local user groups on the FortiGate."""
+    try:
+        data = await _reg().get_client(device).list_user_groups()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_authenticated_users(device: str = "default") -> str:
+    """List currently authenticated firewall users (active logins)."""
+    try:
+        data = await _reg().get_client(device).list_firewall_authenticated_users()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── WiFi Controller Tools ────────────────────────────────────────────────────
+
+async def fortigate_list_wifi_ap(device: str = "default") -> str:
+    """List managed Access Points (AP) — name, model, IP, status, client count."""
+    try:
+        data = await _reg().get_client(device).list_wifi_ap()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_wifi_ssid(device: str = "default") -> str:
+    """List SSID (WLAN) configurations."""
+    try:
+        data = await _reg().get_client(device).list_wifi_ssid()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_wifi_clients(device: str = "default") -> str:
+    """List connected WiFi clients — shows who is on the wireless network."""
+    try:
+        data = await _reg().get_client(device).list_wifi_client()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── Security Profile Tools ───────────────────────────────────────────────────
+
+async def fortigate_list_antivirus_profiles(device: str = "default") -> str:
+    """List antivirus profiles configured on the FortiGate."""
+    try:
+        data = await _reg().get_client(device).list_antivirus_profile()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_ips_profiles(device: str = "default") -> str:
+    """List IPS (Intrusion Prevention System) sensor profiles."""
+    try:
+        data = await _reg().get_client(device).list_ips_profile()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_webfilter_profiles(device: str = "default") -> str:
+    """List web filter profiles configured on the FortiGate."""
+    try:
+        data = await _reg().get_client(device).list_webfilter_profile()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_application_lists(device: str = "default") -> str:
+    """List application control lists (application signatures)."""
+    try:
+        data = await _reg().get_client(device).list_application_list()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── DHCP Tools ───────────────────────────────────────────────────────────────
+
+async def fortigate_list_dhcp_server(device: str = "default") -> str:
+    """List DHCP server configurations (scope, range, lease time)."""
+    try:
+        data = await _reg().get_client(device).list_dhcp_server()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_dhcp_leases(device: str = "default") -> str:
+    """List current DHCP leases — shows assigned IPs and MAC addresses."""
+    try:
+        data = await _reg().get_client(device).list_dhcp_lease()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── ARP / Sessions ───────────────────────────────────────────────────────────
+
+async def fortigate_list_arp_table(device: str = "default") -> str:
+    """List the ARP table — IP to MAC address mappings."""
+    try:
+        data = await _reg().get_client(device).list_arp_table()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_sessions(
+    filter: str = "",
+    device: str = "default",
+) -> str:
+    """
+    List active firewall sessions.
+    filter — optional filter string, e.g. 'srcaddr=10.0.0.1'
+    """
+    try:
+        data = await _reg().get_client(device).list_sessions(filter_str=filter)
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+# ─── HA Tools ─────────────────────────────────────────────────────────────────
+
+async def fortigate_get_ha_status(device: str = "default") -> str:
+    """Get HA cluster status — which unit is primary, sync state, member list."""
+    try:
+        data = await _reg().get_client(device).get_ha_status()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))

@@ -21,11 +21,14 @@ type-safe set of tools — no CLI expertise or API knowledge required.
 
 ---
 
-## 🛠️ Available Tools
+## 🛠️ Available Tools (36 total)
+
+Every tool accepts an optional `device` parameter to target a specific FortiGate.
+
+### 📋 Core Firewall
 
 | Tool | Description |
 |------|-------------|
-| `fortigate_list_devices` | Discover all registered FortiGate devices |
 | `fortigate_list_addresses` | List all firewall address objects |
 | `fortigate_create_address` | Create an address (ipmask / iprange / fqdn / dynamic) |
 | `fortigate_delete_address` | Delete an address by name |
@@ -35,12 +38,63 @@ type-safe set of tools — no CLI expertise or API knowledge required.
 | `fortigate_list_services` | List all custom service objects |
 | `fortigate_create_service` | Create a TCP/UDP/SCTP/ICMP service |
 | `fortigate_delete_service` | Delete a service by name |
-| `fortigate_list_interfaces` | List all network interfaces |
-| `fortigate_list_routes` | List all static routes |
-| `fortigate_get_status` | Get system status (serial, firmware, HA, uptime) |
-| `fortigate_get_license` | Get license information |
 
-Every tool accepts an optional `device` parameter to target a specific firewall.
+### 🔌 VPN
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_sslvpn_settings` | SSLVPN portal settings (IP pool, DNS, tunnel mode) |
+| `fortigate_list_sslvpn_users` | Local SSLVPN users |
+| `fortigate_list_sslvpn_groups` | SSLVPN user groups |
+| `fortigate_list_sslvpn_connections` | Active SSLVPN connections (who is connected now) |
+| `fortigate_list_ipsec_phase1` | IPSec phase-1 (IKE) tunnel configs |
+| `fortigate_list_ipsec_phase2` | IPSec phase-2 (ESP) tunnel configs |
+| `fortigate_list_ipsec_connections` | Active IPSec tunnel status |
+
+### 👤 User & Authentication
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_users` | Local user accounts |
+| `fortigate_list_user_groups` | Local user groups |
+| `fortigate_list_authenticated_users` | Currently authenticated users |
+
+### 📶 WiFi Controller
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_wifi_ap` | Managed Access Points (AP) — name, model, IP, status |
+| `fortigate_list_wifi_ssid` | SSID (WLAN) configurations |
+| `fortigate_list_wifi_clients` | Connected WiFi clients |
+
+### 🔒 Security Profiles
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_antivirus_profiles` | Antivirus profiles |
+| `fortigate_list_ips_profiles` | IPS sensor profiles |
+| `fortigate_list_webfilter_profiles` | Web filter profiles |
+| `fortigate_list_application_lists` | Application control lists |
+
+### 🌐 Network
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_interfaces` | All network interfaces |
+| `fortigate_list_routes` | Static routes |
+| `fortigate_list_dhcp_server` | DHCP server configurations |
+| `fortigate_list_dhcp_leases` | Current DHCP leases |
+| `fortigate_list_arp_table` | ARP table (IP → MAC) |
+| `fortigate_list_sessions` | Active firewall sessions (filterable) |
+
+### 🖥️ System
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_devices` | Discover all registered FortiGate devices |
+| `fortigate_get_status` | System status (serial, firmware, HA, uptime) |
+| `fortigate_get_license` | License info (FortiCare, AV, IPS, VM) |
+| `fortigate_get_ha_status` | HA cluster status (primary, sync, members) |
 
 ---
 

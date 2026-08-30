@@ -179,6 +179,112 @@ class FortiGateClient:
     async def list_routes(self) -> list[dict[str, Any]]:
         return await self._get("/cmdb/router/static", scope="vdom")
 
+    # ── SSLVPN ─────────────────────────────────────────────
+
+    async def list_sslvpn_settings(self) -> dict[str, Any]:
+        """Return SSLVPN portal settings."""
+        return await self._get("/cmdb/vpn.ssl/settings")
+
+    async def list_sslvpn_users(self) -> list[dict[str, Any]]:
+        """Return local SSL VPN users."""
+        return await self._get("/cmdb/user/local", scope="vdom")
+
+    async def list_sslvpn_groups(self) -> list[dict[str, Any]]:
+        """Return SSL VPN user groups."""
+        return await self._get("/cmdb/user/group", scope="vdom")
+
+    async def list_sslvpn_connections(self) -> dict[str, Any]:
+        """Return active SSLVPN connections."""
+        return await self._get("/monitor/vpn/ssl")
+
+    # ── IPSec VPN ─────────────────────────────────────────
+
+    async def list_ipsec_phase1(self) -> list[dict[str, Any]]:
+        """Return IPSec phase-1 (IKE) tunnel configurations."""
+        return await self._get("/cmdb/vpn.ipsec/phase1-interface", scope="vdom")
+
+    async def list_ipsec_phase2(self) -> list[dict[str, Any]]:
+        """Return IPSec phase-2 (ESP) tunnel configurations."""
+        return await self._get("/cmdb/vpn.ipsec/phase2-interface", scope="vdom")
+
+    async def list_ipsec_connections(self) -> dict[str, Any]:
+        """Return active IPSec VPN tunnel status."""
+        return await self._get("/monitor/vpn/ipsec")
+
+    # ── User / Authentication ─────────────────────────────
+
+    async def list_users(self) -> list[dict[str, Any]]:
+        """Return local user accounts."""
+        return await self._get("/cmdb/user/local", scope="vdom")
+
+    async def list_user_groups(self) -> list[dict[str, Any]]:
+        """Return local user groups."""
+        return await self._get("/cmdb/user/group", scope="vdom")
+
+    async def list_firewall_authenticated_users(self) -> dict[str, Any]:
+        """Return currently authenticated firewall users."""
+        return await self._get("/monitor/user/firewall")
+
+    # ── WiFi Controller (AP) ──────────────────────────────
+
+    async def list_wifi_ap(self) -> list[dict[str, Any]]:
+        """Return managed Access Points (AP) status."""
+        return await self._get("/cmdb/wifi/ap", scope="vdom")
+
+    async def list_wifi_client(self) -> dict[str, Any]:
+        """Return connected WiFi clients."""
+        return await self._get("/monitor/wifi/client")
+
+    async def list_wifi_ssid(self) -> list[dict[str, Any]]:
+        """Return SSID (WLAN) configurations."""
+        return await self._get("/cmdb/wifi/ssid", scope="vdom")
+
+    # ── Security Profiles ─────────────────────────────────
+
+    async def list_antivirus_profile(self) -> list[dict[str, Any]]:
+        return await self._get("/cmdb/antivirus/profile", scope="vdom")
+
+    async def list_ips_profile(self) -> list[dict[str, Any]]:
+        return await self._get("/cmdb/ips/sensor", scope="vdom")
+
+    async def list_webfilter_profile(self) -> list[dict[str, Any]]:
+        return await self._get("/cmdb/webfilter/profile", scope="vdom")
+
+    async def list_application_list(self) -> list[dict[str, Any]]:
+        return await self._get("/cmdb/application/list", scope="vdom")
+
+    # ── DHCP ──────────────────────────────────────────────
+
+    async def list_dhcp_server(self) -> list[dict[str, Any]]:
+        return await self._get("/cmdb/system.dhcp/server", scope="vdom")
+
+    async def list_dhcp_lease(self) -> dict[str, Any]:
+        """Return current DHCP leases."""
+        return await self._get("/monitor/system/dhcp/lease")
+
+    # ── ARP / Neighbour ──────────────────────────────────
+
+    async def list_arp_table(self) -> list[dict[str, Any]]:
+        return await self._get("/cmdb/system/arp", scope="vdom")
+
+    # ── Sessions ──────────────────────────────────────────
+
+    async def list_sessions(self, filter_str: str = "") -> dict[str, Any]:
+        """
+        Return active firewall sessions.
+        filter_str — e.g. 'srcaddr=10.0.0.1' to filter results.
+        """
+        path = "/monitor/firewall/session"
+        if filter_str:
+            path = f"{path}?filter={filter_str}"
+        return await self._get(path)
+
+    # ── HA / Cluster ──────────────────────────────────────
+
+    async def get_ha_status(self) -> dict[str, Any]:
+        """Return HA cluster status and member info."""
+        return await self._get("/monitor/cluster/ha")
+
     # ── System Info (read-only) ────────────────────────────
 
     async def get_system_status(self) -> dict[str, Any]:
