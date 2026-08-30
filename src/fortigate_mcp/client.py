@@ -407,6 +407,45 @@ class FortiGateClient:
         """Return live SD-WAN status — per-member link status, SLA status, traffic steering."""
         return await self._get("/monitor/sdwan/status")
 
+    # ── Logs ─────────────────────────────────────────────
+
+    async def list_log_categories(self) -> list[dict[str, Any]]:
+        """Return available log categories (traffic, dns, event, attack, etc.)."""
+        return await self._get("/log/category")
+
+    async def get_log_settings(self) -> dict[str, Any]:
+        """Return local log settings — log level, format, device, memory buffer size."""
+        return await self._get("/cmdb/log/memory/global")
+
+    async def list_log_forward(self) -> list[dict[str, Any]]:
+        """Return log forwarding profiles — syslog/FortiAnalyzer destinations."""
+        return await self._get("/cmdb/log.syslogd/setting")
+
+    async def get_log_events(self, filter: str = "") -> list[dict[str, Any]]:
+        """Return event logs — system events, admin logins, configuration changes."""
+        params = f"?filter={filter}" if filter else ""
+        return await self._get(f"/monitor/log/event{params}")
+
+    async def get_traffic_logs(self, filter: str = "") -> list[dict[str, Any]]:
+        """Return recent traffic logs — source, dest, action, bytes, session ID."""
+        params = f"?filter={filter}" if filter else ""
+        return await self._get(f"/monitor/log/traffic{params}")
+
+    async def get_attack_logs(self, filter: str = "") -> list[dict[str, Any]]:
+        """Return intrusion/attack logs — signature, severity, source, destination."""
+        params = f"?filter={filter}" if filter else ""
+        return await self._get(f"/monitor/log/attack{params}")
+
+    async def get_dns_logs(self, filter: str = "") -> list[dict[str, Any]]:
+        """Return DNS query logs — domain, IP, query type, action."""
+        params = f"?filter={filter}" if filter else ""
+        return await self._get(f"/monitor/log/dns{params}")
+
+    async def get_app_control_logs(self, filter: str = "") -> list[dict[str, Any]]:
+        """Return application control logs — app ID, category, action, bandwidth."""
+        params = f"?filter={filter}" if filter else ""
+        return await self._get(f"/monitor/log/app-ctrl{params}")
+
     # ── System Info (read-only) ────────────────────────────
 
     async def get_system_status(self) -> dict[str, Any]:

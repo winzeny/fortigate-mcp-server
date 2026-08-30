@@ -21,7 +21,7 @@ type-safe set of tools — no CLI expertise or API knowledge required.
 
 ---
 
-## 🛠️ Available Tools (62 total)
+## 🛠️ Available Tools (70 total)
 
 Every tool accepts an optional `device` parameter to target a specific FortiGate.
 
@@ -133,6 +133,19 @@ Every tool accepts an optional `device` parameter to target a specific FortiGate
 | `fortigate_list_sdwan_rules` | SD-WAN service rules — SLA strategy, load-balance method |
 | `fortigate_list_sdwan_sla` | SD-WAN SLA thresholds — latency, jitter, packet-loss |
 | `fortigate_get_sdwan_status` | Live SD-WAN status — link quality per member, SLA pass/fail |
+
+### 📋 Logs
+
+| Tool | Description |
+|------|-------------|
+| `fortigate_list_log_categories` | Available log categories — traffic, dns, event, attack, etc. |
+| `fortigate_get_log_settings` | Local log settings — level, format, buffer size |
+| `fortigate_list_log_forward` | Log forwarding profiles — syslog/FortiAnalyzer destinations |
+| `fortigate_get_log_events` | Event logs — admin logins, config changes, system events |
+| `fortigate_get_traffic_logs` | Traffic logs — source, dest, action, bytes, session ID |
+| `fortigate_get_attack_logs` | Intrusion/attack logs — signature, severity, src/dst |
+| `fortigate_get_dns_logs` | DNS query logs — domain, IP, query type, action |
+| `fortigate_get_app_control_logs` | App control logs — app ID, category, action, bandwidth |
 
 ### 🖥️ System
 

@@ -738,3 +738,77 @@ async def fortigate_get_sdwan_status(device: str = "default") -> str:
         return _ok(data)
     except Exception as e:
         return _err(str(e))
+
+
+# ─── Log Tools ────────────────────────────────────────────────────────────────
+
+async def fortigate_list_log_categories(device: str = "default") -> str:
+    """List available log categories — traffic, dns, event, attack, app-ctrl, etc."""
+    try:
+        data = await _reg().get_client(device).list_log_categories()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_log_settings(device: str = "default") -> str:
+    """Get local log settings — log level, format, device, memory buffer size."""
+    try:
+        data = await _reg().get_client(device).get_log_settings()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_list_log_forward(device: str = "default") -> str:
+    """List log forwarding profiles — syslog/FortiAnalyzer destinations."""
+    try:
+        data = await _reg().get_client(device).list_log_forward()
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_log_events(filter: str = "", device: str = "default") -> str:
+    """Get event logs — admin logins, config changes, system events. Supports filter."""
+    try:
+        data = await _reg().get_client(device).get_log_events(filter=filter)
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_traffic_logs(filter: str = "", device: str = "default") -> str:
+    """Get recent traffic logs — source, dest, action, bytes, session ID. Supports filter."""
+    try:
+        data = await _reg().get_client(device).get_traffic_logs(filter=filter)
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_attack_logs(filter: str = "", device: str = "default") -> str:
+    """Get intrusion/attack logs — signature, severity, src/dst IP. Supports filter."""
+    try:
+        data = await _reg().get_client(device).get_attack_logs(filter=filter)
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_dns_logs(filter: str = "", device: str = "default") -> str:
+    """Get DNS query logs — domain, IP, query type, action. Supports filter."""
+    try:
+        data = await _reg().get_client(device).get_dns_logs(filter=filter)
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))
+
+
+async def fortigate_get_app_control_logs(filter: str = "", device: str = "default") -> str:
+    """Get application control logs — app ID, category, action, bandwidth. Supports filter."""
+    try:
+        data = await _reg().get_client(device).get_app_control_logs(filter=filter)
+        return _ok(data)
+    except Exception as e:
+        return _err(str(e))

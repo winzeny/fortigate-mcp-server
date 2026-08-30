@@ -577,6 +577,86 @@ def _make_tools() -> list[Tool]:
                 "properties": {"device": {"type": "string", "default": "default"}},
             },
         ),
+        # ── Logs ──
+        Tool(
+            name="fortigate_list_log_categories",
+            description="List available log categories — traffic, dns, event, attack, app-ctrl, etc.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_log_settings",
+            description="Get local log settings — log level, format, device, memory buffer size.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_list_log_forward",
+            description="List log forwarding profiles — syslog/FortiAnalyzer destinations.",
+            inputSchema={
+                "type": "object",
+                "properties": {"device": {"type": "string", "default": "default"}},
+            },
+        ),
+        Tool(
+            name="fortigate_get_log_events",
+            description="Get event logs — admin logins, config changes, system events.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filter": {"type": "string", "description": "FortiGate filter string, e.g. 'user=admin' (optional)"},
+                    "device": {"type": "string", "default": "default"},
+                },
+            },
+        ),
+        Tool(
+            name="fortigate_get_traffic_logs",
+            description="Get recent traffic logs — source, dest, action, bytes, session ID.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filter": {"type": "string", "description": "FortiGate filter string, e.g. 'dst=8.8.8.8' (optional)"},
+                    "device": {"type": "string", "default": "default"},
+                },
+            },
+        ),
+        Tool(
+            name="fortigate_get_attack_logs",
+            description="Get intrusion/attack logs — signature, severity, source, destination.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filter": {"type": "string", "description": "FortiGate filter string (optional)"},
+                    "device": {"type": "string", "default": "default"},
+                },
+            },
+        ),
+        Tool(
+            name="fortigate_get_dns_logs",
+            description="Get DNS query logs — domain, IP, query type, action.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filter": {"type": "string", "description": "FortiGate filter string (optional)"},
+                    "device": {"type": "string", "default": "default"},
+                },
+            },
+        ),
+        Tool(
+            name="fortigate_get_app_control_logs",
+            description="Get application control logs — app ID, category, action, bandwidth.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filter": {"type": "string", "description": "FortiGate filter string (optional)"},
+                    "device": {"type": "string", "default": "default"},
+                },
+            },
+        ),
         # ── System (read-only) ──
         Tool(
             name="fortigate_get_status",
@@ -710,6 +790,30 @@ async def _call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
         "fortigate_list_sdwan_rules": lambda: ft.fortigate_list_sdwan_rules(device=dev),
         "fortigate_list_sdwan_sla": lambda: ft.fortigate_list_sdwan_sla(device=dev),
         "fortigate_get_sdwan_status": lambda: ft.fortigate_get_sdwan_status(device=dev),
+        # Logs
+        "fortigate_list_log_categories": lambda: ft.fortigate_list_log_categories(device=dev),
+        "fortigate_get_log_settings": lambda: ft.fortigate_get_log_settings(device=dev),
+        "fortigate_list_log_forward": lambda: ft.fortigate_list_log_forward(device=dev),
+        "fortigate_get_log_events": lambda: ft.fortigate_get_log_events(
+            filter=str(args.get("filter", "")),
+            device=dev,
+        ),
+        "fortigate_get_traffic_logs": lambda: ft.fortigate_get_traffic_logs(
+            filter=str(args.get("filter", "")),
+            device=dev,
+        ),
+        "fortigate_get_attack_logs": lambda: ft.fortigate_get_attack_logs(
+            filter=str(args.get("filter", "")),
+            device=dev,
+        ),
+        "fortigate_get_dns_logs": lambda: ft.fortigate_get_dns_logs(
+            filter=str(args.get("filter", "")),
+            device=dev,
+        ),
+        "fortigate_get_app_control_logs": lambda: ft.fortigate_get_app_control_logs(
+            filter=str(args.get("filter", "")),
+            device=dev,
+        ),
         # System
         "fortigate_get_status": lambda: ft.fortigate_get_status(device=dev),
         "fortigate_get_license": lambda: ft.fortigate_get_license(device=dev),
