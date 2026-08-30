@@ -46,7 +46,29 @@ Every tool accepts an optional `device` parameter to target a specific firewall.
 
 ## 🔧 Quick Start
 
-### 1 — Install
+### 1 — Python Environment Setup (Ubuntu)
+
+```bash
+# Install Python 3.10+ if not already present
+sudo apt update
+sudo apt install -y python3 python3-pip python3-venv
+
+# Clone the repo (or if already cloned, just cd into it)
+git clone https://github.com/winzeny/fortigate-mcp-server.git
+cd fortigate-mcp-server
+
+# Create a virtual environment (recommended)
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install the package in editable mode
+pip install -e .
+```
+
+> 💡 To deactivate the virtual environment, run: `deactivate`
+> To reactivate it later: `source .venv/bin/activate`
+
+### 2 — Install
 
 ```bash
 pip install -e .
@@ -58,7 +80,7 @@ or from GitHub:
 pip install git+https://github.com/winzeny/fortigate-mcp-server.git
 ```
 
-### 2 — Get a FortiGate API Token
+### 3 — Get a FortiGate API Token
 
 1. FortiGate GUI → **System → Administrators** → Create New
 2. Type: **REST API Admin**
@@ -67,7 +89,7 @@ pip install git+https://github.com/winzeny/fortigate-mcp-server.git
 
 > ⚠️ Store the token securely. It grants the same privileges as the admin that created it.
 
-### 3 — Configure
+### 4 — Configure
 
 **Environment variables** (for the default / primary device):
 
@@ -106,7 +128,7 @@ devices:
     verify_ssl: false   # self-signed cert only
 ```
 
-### 4 — Register with Hermes Agent
+### 5 — Register with Hermes Agent
 
 Add to **`~/.hermes/config.yaml`**:
 
@@ -123,7 +145,7 @@ Restart the gateway:
 hermes gateway restart
 ```
 
-### 5 — Use in plain English
+### 6 — Use in plain English
 
 ```
 You: Show me all registered FortiGate devices
