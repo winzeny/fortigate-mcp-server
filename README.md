@@ -225,19 +225,19 @@ FORTIGATE_INSECURE=false
 devices:
   - name: hq-fw
     host: https://10.0.0.1
-    api_token: hq-token
+    api_token: your-token-here
     vdom: root
     verify_ssl: true
 
   - name: branch-fw
-    host: https://10.0.1.1
-    api_token: branch-token
+    host: https://10.1.1.1
+    api_token: your-token-here
     vdom: root
     verify_ssl: true
 
   - name: lab-fw
     host: https://192.168.1.1
-    api_token: lab-token
+    api_token: your-token-here
     vdom: lab-vdom
     verify_ssl: false   # self-signed cert only
 ```
